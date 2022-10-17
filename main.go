@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 
 	"github.com/Mohamed-Hamdy-abdallah/blogbackend/database"
 	"github.com/Mohamed-Hamdy-abdallah/blogbackend/routes"
@@ -16,7 +15,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env files")
 	}
-	port := os.Getenv("PORT")
+	port := "3000"
 	app := fiber.New()
 	routes.Setup(app)
 	app.Listen(":" + port)
