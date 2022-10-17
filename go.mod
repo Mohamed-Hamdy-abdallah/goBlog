@@ -1,7 +1,7 @@
 module github.com/Mohamed-Hamdy-abdallah/blogbackend
 
-// +heroku goVersion go1.17
-go 1.17
+// +heroku goVersion go1.19
+go 1.179
 
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
