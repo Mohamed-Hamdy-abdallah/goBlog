@@ -2,6 +2,7 @@ package database
 
 import (
 	"log"
+	"os"
 
 	"github.com/Mohamed-Hamdy-abdallah/blogbackend/models"
 	"github.com/joho/godotenv"
@@ -16,7 +17,7 @@ func Connect() {
 	if err != nil {
 		log.Fatal("error while loading env file")
 	}
-	dsn := "sql6527052:LqwTvdBi3J@tcp(sql6.freesqldatabase.com:3306)/sql6527052?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := os.Getenv("DSN")
 	database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("Couldn't connect to DB")
