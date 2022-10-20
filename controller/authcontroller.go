@@ -11,6 +11,7 @@ import (
 	"github.com/Mohamed-Hamdy-abdallah/blogbackend/database"
 	"github.com/Mohamed-Hamdy-abdallah/blogbackend/models"
 	"github.com/Mohamed-Hamdy-abdallah/blogbackend/util"
+	"github.com/gin-gonic/gin"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
 )
@@ -72,6 +73,8 @@ func Register(c *fiber.Ctx) error {
 
 }
 
+var ctx *gin.Context
+
 func Login(c *fiber.Ctx) error {
 	var data map[string]string
 	if err := c.BodyParser(&data); err != nil {
@@ -102,15 +105,62 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	cookie := fiber.Cookie{
-		Name:     "jwt",
-		Value:    token,
-		Expires:  time.Now().Add(time.Hour * 24),
-		HTTPOnly: true,
+		Name:    "jwt",
+		Value:   token,
+		Expires: time.Now().Add(time.Hour * 24),
 	}
 	c.Cookie(&cookie)
+	// ctx.SetCookie("jwt", token, 60*60*24, "/", "localhost", false, true)
 	return c.JSON(fiber.Map{
 		"message": "you have succesfully login",
 		"user":    user,
+		"token":   token,
+	})
+}
+
+func GetUser(c *fiber.Ctx) error {
+
+	cookie := c.Cookies("jwt")
+
+	userid, _ := util.ParseJwt(cookie)
+
+	var user models.User
+	database.DB.Where("id=?", strings.TrimSpace(userid)).First(&user)
+
+	if user.Id == 0 {
+		c.Status(404)
+		return c.JSON(fiber.Map{
+			"message": "No log in User",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"user": user,
+	})
+}
+
+func GetToken(c *fiber.Ctx) error {
+	// cookie := c.Cookies("jwt")
+	return c.JSON(fiber.Map{
+		"token": "123",
+	})
+}
+
+func Logout(c *fiber.Ctx) error {
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Expires:  time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC),
+		Value:    "",
+		HTTPOnly: true,
+		// Path:     "/api/auth",
+		Domain: "/localhost",
+	}
+	c.Cookie(&cookie)
+	// c.ClearCookie("jwt")
+	// ctx.SetCookie("jwt", "", -1, "/", "localhost", false, true)
+
+	return c.JSON(fiber.Map{
+		"message": "Logged out",
 	})
 }
 

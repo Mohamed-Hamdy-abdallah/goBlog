@@ -9,6 +9,9 @@ import (
 func Setup(app *fiber.App) {
 	app.Post("/api/register", controller.Register)
 	app.Post("/api/login", controller.Login)
+	app.Get("/api/logout", controller.Logout)
+	app.Get("/api/getuser", controller.GetUser)
+	app.Get("/api/token", controller.GetToken)
 
 	app.Use(middleware.IsAuthenticate)
 
