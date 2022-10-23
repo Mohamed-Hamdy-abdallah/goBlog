@@ -42,7 +42,7 @@ func main() {
 
 	app.Use(cors.New(cors.Config{
 		AllowHeaders:     "Origin, Content-Type, Accept, Content-Length, Accept-Language, Accept-Encoding, Connection, Access-Control-Allow-Origin,Authorization,withCredentials",
-		AllowOrigins:     "https://635181d75a82b9730f5ff204--fanciful-kelpie-c8eddb.netlify.app/, https://app-blog-react-project.herokuapp.com/",
+		AllowOrigins:     "*",
 		AllowCredentials: true,
 		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
 	}))
